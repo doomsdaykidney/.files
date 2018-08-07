@@ -1,0 +1,146 @@
+# ----------------------------------------------------------------------------
+#
+#                                      V 2.7
+#
+# -----------------------------------------------------------------------------
+
+# Set ctrl-a as <prefix> - closer and doesn't conflict with vim
+unbind C-b
+set -g prefix C-a
+
+# No delay for escape key press
+set -sg escape-time 0
+
+# Starts window / pane numbering at 1 rather than the default of 0
+set -g base-index 1
+
+# Mouse Options
+set-option mouse on
+
+# Reload config with <prefix> R
+bind R source-file ~/.tmux.conf \; display-message "~/.tmux.conf reloaded..."
+
+# Automatically renumber windows upon window closure
+set -g renumber-windows on
+
+# Increase tmux terminal history (default ~2000)
+set -g history-limit 10000
+
+# Add truecolor support - Plugins
+set-option -ga terminal-overrides ",xterm-256color:Tc"
+
+# Status Bar -------------------------------------------------------------------------
+set -g status-position top
+set -g status-justify left
+set -g status-left ''
+set -g status-right ''
+
+set -g status-bg default
+set -g status-fg colour8
+set -g status-attr underscore
+set -g status-interval 2
+setw -g window-status-format "#[bg=default]#[fg=colour8]   #W   "
+setw -g window-status-current-format "#[bg=default]#[fg=#ebdbb2]   #W   "
+setw -g window-status-current-attr underscore
+
+
+# set -g status-fg default
+# setw -g window-status-format "#[bg=default]#[fg=#ebdbb2]  #W   "
+# setw -g window-status-current-format "#[bg=default]#[fg=colour8]• #W   "
+# set -g status-right '#(date +%H:%M)'
+
+# Panes -----------------------------------------------------------------------
+
+# Stay in directory upon creation of new window or splitting a pane into two
+bind c new-window -c "#{pane_current_path}"
+bind h split-window -h -c '#{pane_current_path}'
+bind v split-window -v -c '#{pane_current_path}'
+
+# Use Alt-arrow keys to switch between panes
+bind -n M-Left select-pane -L
+bind -n M-Right select-pane -R
+bind -n M-Up select-pane -U
+bind -n M-Down select-pane -D
+
+# Use Shift-arrow keys to switch between windows
+bind-key -n S-Right next-window
+bind-key -n S-Left previous-window
+bind-key -n S-Up new-window
+
+# Stolen bits that need looking into -------------------------------------------------
+# 
+# set -g display-panes-colour "$tmux_conf_theme_pane_indicator" 
+# set -g display-panes-active-colour "$tmux_conf_theme_pane_active_indicator"
+# 
+# setw -g pane-border-style "fg=$tmux_conf_theme_pane_border_fg,bg=$tmux_conf_theme_pane_border_bg"
+# set -g pane-active-border-style "fg=$tmux_conf_theme_pane_active_border_fg,bg=$tmux_conf_theme_pane_active_border_bg"
+
+set -g window-style bg=black
+set -g window-active-style bg=black
+
+set -g pane-active-border-fg green 
+set -g pane-active-border-bg black
+set -g pane-border-fg colour250
+set -g pane-border-bg black 
+
+
+
+
+
+
+
+
+
+
+
+# ----------------------------------------------------------------------------
+#
+#                                      OLD
+#
+# -----------------------------------------------------------------------------
+#
+# Mouse Options (Worked on tmux 1.8)
+# set-option mouse-select-pane on         # Allows mouse to select the current pane
+# set-option mouse-resize-pane on         # Allows mouse to resize pane by dragging boarders
+# set-option mouse-select-window on       # Click on window name in status line to change window
+#
+# Allows the use of 256 colours in tmux
+# set -g default-terminal "tmux-256color"
+
+
+
+
+
+
+# # Colour stuff -----------------------------------------------------------------------
+# 
+# # Allows the use of 256 colours in tmux
+# # set -g default-terminal "tmux-256color"
+# # Add truecolor support - Plugins
+# set-option -ga terminal-overrides ",xterm-256color:Tc"
+# 
+# # Colour theme
+# absolute_white=#FFFFFF 		      # White
+# active=#000000                  # Black
+# inactive=colour234		          # Dark Grey
+# active_accent=colour69		      # Blue
+# inactive_accent=#f9f5d7  	      # Light Grey - Status bar
+# 
+# #set inactive/active window styles
+# set -g window-style bg=$inactive		    # Inactive pane background colour
+# set -g window-active-style bg=$active		# Active pane background colour
+# 
+# # set the pane border colors 
+# set -g pane-border-fg $inactive_accent	      	# Inactive pane boarder
+# set -g pane-border-bg $inactive_accent		      # Inactive pane boarder
+# set -g pane-active-border-fg $inactive_accent 	# Active pane boarder
+# set -g pane-active-border-bg $inactive_accent	  # Active pane boarder
+# # set -g pane-active-border-fg $active_accent  	# Active pane boarder
+# # set -g pane-active-border-bg $active_accent	  # Active pane boarder
+# 
+# # Status Line Customisation
+# set-option -g status-position top			                            # Move status bar from bottom (default) to top
+# set-option status-bg $inactive_accent			                        # Background to grey
+# set-option status-fg $absolute_white	                            # 
+# set-window-option -g window-status-current-fg $active        	    # 
+# set-window-option -g window-status-current-bg $inactive_accent    # 

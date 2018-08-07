@@ -1,0 +1,247 @@
+" ----------------------------------------------------------------------------
+"
+"                          Important to be at the top
+"
+" -----------------------------------------------------------------------------
+
+set nocompatible	" Prevents vim from defaulting to certin Vi defaults which break things
+
+"
+" ----------------------------------------------------------------------------
+"
+"                          Bastardised Plugins Specific Stuff (Vundle)
+"
+" -----------------------------------------------------------------------------
+filetype off      " Required by Vundle
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Plugin 'VundleVim/Vundle.vim'
+
+" PLUGINS START
+Plugin 'jlfwong/vim-mercenary'        " HGblame to see who and when a change was made
+Plugin 'morhetz/gruvbox'              " Colours
+Plugin 'vim-scripts/fitnesse.vim'     " Fitnesse syntax highlighting
+" PLUGINS END
+
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+
+" ----------------------------------------------------------------------------
+"
+"                          	Settings due to using Plugins
+"
+" -----------------------------------------------------------------------------
+au BufNewFile,BufRead *.wiki set ft=fitnesse
+
+colorscheme gruvbox
+set background=dark
+let g:gruvbox_contrast_dark = 'hard'
+
+highlight cursorline cterm=bold guibg=#282828
+highlight LineNr guibg=#282828
+
+
+" ----------------------------------------------------------------------------
+"
+"                          	Non-Plugin Settings
+"
+" -----------------------------------------------------------------------------
+
+" Show (partial) command in status line
+set showcmd
+
+" sets tabs to 2 spaces
+set tabstop=2          
+
+" Underlines the current line - can be modified (needs to be below colourscheme)
+set cursorline
+
+" Allows 5 lines at the top and bottom of the screen before screen moves
+set scrolloff=5
+
+" Line Numbers
+set number
+
+
+" Custom Key Bindings
+map <F2> :Vexplore<Enter>        " opens a new explore window vertically
+map <F3> :Hexplore<Enter>        " opens a new explore window horizonally
+map <F4> :Rexplore<Enter>        " reopens an explore window, use ':Explore' if no previous
+
+map <F5> :bp<Enter>              " previous open buffer
+map <F6> :bn<Enter>              " next open buffer
+map <F7> :b# \| bd # <Enter>     " move to previous buffer, close current one
+
+
+"  Mouse Options
+set mouse+=a      " click and drag selets text in visual mode
+
+" Writes the file automatically (i.e. when using ctags to move between files)
+set autowrite
+set autoread
+
+" jump to the last position when reopening a file
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal! g'\"" | endif
+endif
+
+
+" ------- Things that alex has suggested that are really quite cool!
+
+" Move gcompletekey to get tab complete working
+let g:completekey = "<Insert>"
+set completeopt=longest,menuone
+
+" Smarter searching
+set ignorecase
+set smartcase
+
+
+
+" ----------------------------------------------------------------------------
+"
+"                          	Settings for when not using plugins
+"
+" -----------------------------------------------------------------------------
+
+" Lets you use 256 colours rather than the 8 specified in .vimrc
+" set t_Co=256
+
+" Colourscheme
+" color desert
+
+" Highlighting
+
+set termguicolors
+syntax enable
+"set hlsearch
+
+" Sets cursorline to be bold in comparision to rest of file
+" hi cursorline term=bold cterm=bold guibg=Grey40
+" highlight LineNr ctermfg=grey
+
+" makes gcompletekey less ugly
+" highlight Pmenu ctermbg=grey guibg=gray
+
+" ----------------------------------------------------------------------------
+"
+"                          	Kept from stock .vimrc
+"
+" -----------------------------------------------------------------------------
+
+" :if has("terminfo")
+" :  set t_Co=8
+" :  set t_Sf=[3%p1%dm
+" :  set t_Sb=[4%p1%dm
+" :else
+" :  set t_Co=8
+" :  set t_Sf=[3%dm
+" :  set t_Sb=[4%dm
+" :endif
+" syntax enable
+" colo desert
+set sm
+set sw=2
+set noai
+set cindent
+set expandtab
+set pastetoggle=<F12>
+"set paste
+set bs=2
+set ruler
+set complete=.,w,b,u,t,]
+" set completeopt=preview
+"set tabstop=8
+
+map <F8> :!ut_ctags<CR>
+map! <F8> <ESC>:!ut_ctags<CR>
+set tags=~/source/.tags,./tags,./TAGS,tags,TAGS,.tags,~/.tags,~/.TAGS
+
+map <F9> :!ut_lib %<CR>
+map! <F9> <ESC>:!ut_lib %<CR>
+map <F10> :!ut_build %<CR>
+map! <F10> <ESC>:!ut_build %<CR>
+
+if has("folding")
+  set foldmethod=indent
+  set foldlevel=99
+endif " has("folding")
+
+" Only do this part when compiled with support for autocommands.
+if has("autocmd")
+
+  autocmd BufRead web_* map <F10> :!ut_lib % && ut_build web_om<CR>
+  autocmd BufRead web_* map! <F10> <ESC>:!ut_lib % && ut_build web_om<CR>
+
+  autocmd BufRead web_om.c map <F10> :!ut_build web_om<CR>
+  autocmd BufRead web_om.c map! <F10> <ESC>:!ut_build web_om<CR>
+
+  autocmd BufRead web_status_* map <F10> :!ut_lib % && ut_build web_status<CR>
+  autocmd BufRead web_status_* map! <F10> <ESC>:!ut_lib % && ut_build web_status<CR>
+
+  autocmd BufRead web_status.c map <F10> :!ut_build web_status<CR>
+  autocmd BufRead web_status.c map! <F10> <ESC>:!ut_build web_status<CR>
+
+  autocmd BufRead web_loi_* map <F10> :!ut_lib % && ut_build web_loi<CR>
+  autocmd BufRead web_loi_* map! <F10> <ESC>:!ut_lib % && ut_build web_loi<CR>
+
+  autocmd BufRead web_loi.c map <F10> :!ut_build web_loi<CR>
+  autocmd BufRead web_loi.c map! <F10> <ESC>:!ut_build web_loi<CR>
+
+  autocmd BufRead web_setup.c map <F10> :!ut_build %<CR>
+  autocmd BufRead web_setup.c map! <F10> <ESC>:!ut_build %<CR>
+
+  autocmd BufRead web_roi* map <F10> :!ut_lib % && ut_roi<CR>
+  autocmd BufRead web_roi* map! <F10> <ESC>:!ut_lib % && ut_roi<CR>
+
+  autocmd BufRead web_moi* map <F10> :!ut_lib % && ut_build web_moi<CR>
+  autocmd BufRead web_moi* map! <F10> <ESC>:!ut_lib % && ut_build web_moi<CR>
+
+  autocmd BufRead rdt* map <F10> :!ut_lib % && ut_build rdt_control<CR>
+  autocmd BufRead rdt* map! <F10> <ESC>:!ut_lib % && ut_build rdt_control<CR>
+
+  autocmd BufRead *.js map <F10> :!web_setup<CR>
+  autocmd BufRead *.js map! <F10> :<ESC>!web_setup<CR>
+
+  autocmd BufRead *.css map <F10> :!web_setup<CR>
+  autocmd BufRead *.css map! <F10> :<ESC>!web_setup<CR>
+
+endif " has("autocmd")
+
+" Map shortcuts to write doxygen blocks if the doxygen plugin is found
+function! DoxyShortcuts()
+  map /**f <ESC>:DoxyFunction<CR>
+  map! /**f <ESC>:DoxyFunction<CR>
+  map /**b <ESC>:DoxyBlockLong<CR>
+  map! /**b <ESC>:DoxyBlockLong<CR>
+  map /**< <ESC>:DoxyBriefAfterMember<CR>
+  map! /**< <ESC>:DoxyBriefAfterMember<CR>
+endfunction
+autocmd VimEnter * if exists("g:DoxygenVersion") | :call DoxyShortcuts() | endif
+
+map <C-F> :!grep -n <cword> *.c *.h > .vimfind<CR> :10sp .vimfind<CR> <C-W>r<CR>
+
+:filetype plugin on
+
+if has("autocmd")
+
+  autocmd BufRead *.plugin set filetype=plugin
+  autocmd BufRead sdf.txt set filetype=sdf
+  autocmd BufRead df_alias.txt set filetype=df_alias
+  autocmd BufRead df_proj_alias.txt set filetype=df_alias
+
+  " Standard export filenames for system config
+  autocmd BufRead *.menu_config set filetype=datascript
+  autocmd BufRead *.screen_settings set filetype=datascript
+  autocmd BufRead *.settings set filetype=datascript
+
+endif " has("autocmd")
+
+" Turn on persistent undo
+if has('persistent_undo')
+  set undofile
+  set undodir=$HOME/.vim/vimundo
+endif " has('persistent_undo')
