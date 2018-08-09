@@ -40,8 +40,8 @@ syntax enable
 
 " mohertz/gruvbox
 colorscheme gruvbox
-set background=dark
 let g:gruvbox_contrast_dark = 'hard'
+set background=dark
 
 " vim-scripts/fitnesse.vim
 au BufNewFile,BufRead *.wiki set ft=fitnesse
