@@ -20,6 +20,7 @@ Plugin 'VundleVim/Vundle.vim'
 
 " PLUGINS START
 Plugin 'jlfwong/vim-mercenary'        " HGblame to see who and when a change was made
+Plugin 'justinmk/vim-syntax-extra'    " Super Syntax Highlighting
 Plugin 'morhetz/gruvbox'              " Colours
 Plugin 'vim-scripts/fitnesse.vim'     " Fitnesse syntax highlighting
 " PLUGINS END
@@ -33,21 +34,26 @@ filetype plugin indent on    " required
 "                          	Settings due to using Plugins
 "
 " -----------------------------------------------------------------------------
-au BufNewFile,BufRead *.wiki set ft=fitnesse
 
+" justinmk/vim-syntax-extra
+syntax enable
+
+" mohertz/gruvbox
 colorscheme gruvbox
 set background=dark
 let g:gruvbox_contrast_dark = 'hard'
 
-highlight cursorline cterm=bold guibg=#282828
-highlight LineNr guibg=#282828
-
+" vim-scripts/fitnesse.vim
+au BufNewFile,BufRead *.wiki set ft=fitnesse
 
 " ----------------------------------------------------------------------------
 "
 "                          	Non-Plugin Settings
 "
 " -----------------------------------------------------------------------------
+
+highlight cursorline cterm=bold guibg=#282828
+highlight LineNr guibg=#282828
 
 " Show (partial) command in status line
 set showcmd
@@ -112,11 +118,12 @@ set smartcase
 
 " Colourscheme
 " color desert
+" syntax enable
 
 " Highlighting
 
+" Requires at least version 8 of VIM
 set termguicolors
-syntax enable
 "set hlsearch
 
 " Sets cursorline to be bold in comparision to rest of file
@@ -128,21 +135,10 @@ syntax enable
 
 " ----------------------------------------------------------------------------
 "
-"                          	Kept from stock .vimrc
+"                          	Kept from DAI .vimrc
 "
 " -----------------------------------------------------------------------------
 
-" :if has("terminfo")
-" :  set t_Co=8
-" :  set t_Sf=[3%p1%dm
-" :  set t_Sb=[4%p1%dm
-" :else
-" :  set t_Co=8
-" :  set t_Sf=[3%dm
-" :  set t_Sb=[4%dm
-" :endif
-" syntax enable
-" colo desert
 set sm
 set sw=2
 set noai
