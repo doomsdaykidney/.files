@@ -27,6 +27,7 @@ alias vim="vim -u ~/.danvimrc"
 alias tmux="tmux -u"
 alias t="tmux -2 -u a"
 
+# Allows increased ATF testing speed using PhantomJS rather than Firefox
 PATH="$HOME/bin:$PATH:$HOME/test_centre/fitnesse/selenium/phantomjs-1.9.2-linux-x86_64/bin/"
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
