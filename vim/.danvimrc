@@ -6,10 +6,10 @@
 
 set nocompatible	" Prevents vim from defaulting to certin Vi defaults which break things
 
-"
+
 " ----------------------------------------------------------------------------
 "
-"                          Bastardised Plugins Specific Stuff (Vundle)
+"                          Plugins Specific Stuff (Vundle)
 "
 " -----------------------------------------------------------------------------
 filetype off      " Required by Vundle
@@ -19,6 +19,7 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 " PLUGINS START
+Plugin 'ajh17/VimCompletesMe'         " Tab autocomplete
 Plugin 'jlfwong/vim-mercenary'        " HGblame to see who and when a change was made
 Plugin 'justinmk/vim-syntax-extra'    " Super Syntax Highlighting
 Plugin 'morhetz/gruvbox'              " Colours
@@ -34,6 +35,10 @@ filetype plugin indent on    " required
 "                          	Settings due to using Plugins
 "
 " -----------------------------------------------------------------------------
+
+" ajh17/VimCompletesMe
+let g:completekey = "<Insert>" " Move gcompletekey to get tab complete working
+set completeopt=longest,menuone "???
 
 " justinmk/vim-syntax-extra
 syntax enable
@@ -70,6 +75,9 @@ set scrolloff=5
 " Line Numbers
 set number
 
+set termguicolors " requires vim Version 8.X
+set hlsearch
+set incsearch " highlights as you type out your search
 
 " Custom Key Bindings
 map <F2> :Vexplore<Enter>        " opens a new explore window vertically
@@ -79,7 +87,6 @@ map <F4> :Rexplore<Enter>        " reopens an explore window, use ':Explore' if 
 map <F5> :bp<Enter>              " previous open buffer
 map <F6> :bn<Enter>              " next open buffer
 map <F7> :b# \| bd # <Enter>     " move to previous buffer, close current one
-
 
 "  Mouse Options
 set mouse+=a      " click and drag selets text in visual mode
@@ -94,17 +101,11 @@ if has("autocmd")
     \| exe "normal! g'\"" | endif
 endif
 
-
 " ------- Things that alex has suggested that are really quite cool!
-
-" Move gcompletekey to get tab complete working
-let g:completekey = "<Insert>"
-set completeopt=longest,menuone
 
 " Smarter searching
 set ignorecase
 set smartcase
-
 
 
 " ----------------------------------------------------------------------------
@@ -113,25 +114,30 @@ set smartcase
 "
 " -----------------------------------------------------------------------------
 
-" Lets you use 256 colours rather than the 8 specified in .vimrc
 " set t_Co=256
-
-" Colourscheme
-" color desert
+" colorscheme desert
 " syntax enable
 
-" Highlighting
 
-" Requires at least version 8 of VIM
-set termguicolors
-"set hlsearch
+set showmatch     " When a bracket is inserted, briefly shows matching bracket
+set cindent       " Automatic C program indenting (set by 'shiftwidth')
+set shiftwidth=2  " Number of spaces to indent automatically
 
-" Sets cursorline to be bold in comparision to rest of file
-" hi cursorline term=bold cterm=bold guibg=Grey40
-" highlight LineNr ctermfg=grey
 
-" makes gcompletekey less ugly
-" highlight Pmenu ctermbg=grey guibg=gray
+" Not really sure what they do yet...
+set noautoindent
+
+set expandtab
+set pastetoggle=<F12>
+set bs=2
+set ruler
+set complete=.,w,b,u,t,]
+
+
+if has("folding")
+  set foldmethod=indent
+  set foldlevel=99
+endif " has("folding")
 
 " ----------------------------------------------------------------------------
 "
@@ -139,34 +145,15 @@ set termguicolors
 "
 " -----------------------------------------------------------------------------
 
-set sm
-set sw=2
-set noai
-set cindent
-set expandtab
-set pastetoggle=<F12>
-"set paste
-set bs=2
-set ruler
-set complete=.,w,b,u,t,]
-" set completeopt=preview
-"set tabstop=8
-
 map <F8> :!ut_ctags<CR>
 map! <F8> <ESC>:!ut_ctags<CR>
 set tags=~/source/.tags,./tags,./TAGS,tags,TAGS,.tags,~/.tags,~/.TAGS
-
 map <F9> :!ut_lib %<CR>
 map! <F9> <ESC>:!ut_lib %<CR>
 map <F10> :!ut_build %<CR>
 map! <F10> <ESC>:!ut_build %<CR>
 
-if has("folding")
-  set foldmethod=indent
-  set foldlevel=99
-endif " has("folding")
-
-" Only do this part when compiled with support for autocommands.
+" Gets <F10> to do slightly different things from ut_build based upon file type
 if has("autocmd")
 
   autocmd BufRead web_* map <F10> :!ut_lib % && ut_build web_om<CR>
@@ -207,37 +194,14 @@ if has("autocmd")
 
 endif " has("autocmd")
 
-" Map shortcuts to write doxygen blocks if the doxygen plugin is found
-function! DoxyShortcuts()
-  map /**f <ESC>:DoxyFunction<CR>
-  map! /**f <ESC>:DoxyFunction<CR>
-  map /**b <ESC>:DoxyBlockLong<CR>
-  map! /**b <ESC>:DoxyBlockLong<CR>
-  map /**< <ESC>:DoxyBriefAfterMember<CR>
-  map! /**< <ESC>:DoxyBriefAfterMember<CR>
-endfunction
-autocmd VimEnter * if exists("g:DoxygenVersion") | :call DoxyShortcuts() | endif
-
-map <C-F> :!grep -n <cword> *.c *.h > .vimfind<CR> :10sp .vimfind<CR> <C-W>r<CR>
-
-:filetype plugin on
-
 if has("autocmd")
 
   autocmd BufRead *.plugin set filetype=plugin
   autocmd BufRead sdf.txt set filetype=sdf
   autocmd BufRead df_alias.txt set filetype=df_alias
   autocmd BufRead df_proj_alias.txt set filetype=df_alias
-
-  " Standard export filenames for system config
   autocmd BufRead *.menu_config set filetype=datascript
   autocmd BufRead *.screen_settings set filetype=datascript
   autocmd BufRead *.settings set filetype=datascript
 
 endif " has("autocmd")
-
-" Turn on persistent undo
-if has('persistent_undo')
-  set undofile
-  set undodir=$HOME/.vim/vimundo
-endif " has('persistent_undo')
