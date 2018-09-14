@@ -15,6 +15,7 @@ fi
 alias cslim="cd $HOME/test_centre/cslim"
 alias dev="cd $HOME/test_centre/fitnesse/FitNesseRoot/TestCentre/Tests/DevelopmentTesting"
 alias fat="cd $HOME/test_centre/fitnesse/FitNesseRoot/TestCentre/Tests/FAT"
+alias fitnesse="cd $HOME/test_centre/fitnesse"
 alias hgc="hg commit -u Dan -m"
 alias master="cd $HOME/test_centre/fitnesse/FitNesseRoot/TestCentre/MasterCode"
 

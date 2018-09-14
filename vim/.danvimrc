@@ -122,16 +122,20 @@ set smartcase
 set showmatch     " When a bracket is inserted, briefly shows matching bracket
 set cindent       " Automatic C program indenting (set by 'shiftwidth')
 set shiftwidth=2  " Number of spaces to indent automatically
+set expandtab     " <Tab> inserts spaces rather than a real tab
+set ruler         " Shows the current cursor position within file in statusline
+set complete=.,w,b,u,t  " Complete options
+                   " .	scan the current buffer
+                   " w	scan buffers from other windows
+                   " b	scan other loaded buffers
+                   " u	scan the unloaded buffers
+                   " t	tag completion
 
 
 " Not really sure what they do yet...
 set noautoindent
+set backspace=2  " Backspace, current setting of 2 is archaic, change
 
-set expandtab
-set pastetoggle=<F12>
-set bs=2
-set ruler
-set complete=.,w,b,u,t,]
 
 
 if has("folding")
