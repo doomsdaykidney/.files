@@ -60,6 +60,10 @@ au BufNewFile,BufRead *.wiki set ft=fitnesse
 highlight cursorline cterm=bold guibg=#282828
 highlight LineNr guibg=#282828
 
+" Highlight lines which are longer than 80 characters in red to prompt
+" shortening
+match ErrorMsg '\%>80v.\+'
+
 " Show (partial) command in status line
 set showcmd
 
