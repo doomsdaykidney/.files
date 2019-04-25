@@ -1,3 +1,12 @@
+" Look into
+"
+"
+" " Autocompletion menu on Ctrl + P in insert mode 
+" set completeopt=menu
+" 
+" get ctrl+delete to delete words in front of cursor
+" cmap Q<Enter> :q<Enter>
+
 " ----------------------------------------------------------------------------
 "
 "                          Important to be at the top
@@ -6,63 +15,17 @@
 
 set nocompatible	" Prevents vim from defaulting to certin Vi defaults which break things
 
-
 " ----------------------------------------------------------------------------
 "
-"                          Plugins Specific Stuff (Vundle)
-"
-" -----------------------------------------------------------------------------
-filetype off      " Required by Vundle
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-Plugin 'VundleVim/Vundle.vim'
-
-" PLUGINS START
-Plugin 'ajh17/VimCompletesMe'         " Tab autocomplete
-Plugin 'jlfwong/vim-mercenary'        " HGblame to see who and when a change was made
-Plugin 'justinmk/vim-syntax-extra'    " Super Syntax Highlighting
-Plugin 'morhetz/gruvbox'              " Colours
-Plugin 'vim-scripts/fitnesse.vim'     " Fitnesse syntax highlighting
-" PLUGINS END
-
-call vundle#end()            " required
-filetype plugin indent on    " required
-
-
-" ----------------------------------------------------------------------------
-"
-"                          	Settings due to using Plugins
+"                               Generic Settings
 "
 " -----------------------------------------------------------------------------
 
-" ajh17/VimCompletesMe
-let g:completekey = "<Insert>" " Move gcompletekey to get tab complete working
-set completeopt=longest,menuone "???
+"  Mouse Options
+set mouse+=a      " click and drag selets text in visual mode
 
-" justinmk/vim-syntax-extra
-syntax enable
-
-" mohertz/gruvbox
-colorscheme gruvbox
-let g:gruvbox_contrast_dark = 'hard'
-set background=dark
-
-" vim-scripts/fitnesse.vim
-au BufNewFile,BufRead *.wiki set ft=fitnesse
-
-" ----------------------------------------------------------------------------
-"
-"                          	Non-Plugin Settings
-"
-" -----------------------------------------------------------------------------
-
-highlight cursorline cterm=bold guibg=#282828
-highlight LineNr guibg=#282828
-
-" Highlight lines which are longer than 80 characters in red to prompt
-" shortening
-match ErrorMsg '\%>80v.\+'
+" Line Numbers
+set number
 
 " Show (partial) command in status line
 set showcmd
@@ -70,20 +33,14 @@ set showcmd
 " sets tabs to 2 spaces
 set tabstop=2          
 
-" Underlines the current line - can be modified (needs to be below colourscheme)
-set cursorline
-
 " Allows 5 lines at the top and bottom of the screen before screen moves
 set scrolloff=5
 
-" Line Numbers
-set number
+" Highlight lines which are longer than 80 characters in red to prompt
+" shortening
+match ErrorMsg '\%>80v.\+'
 
-set termguicolors " requires vim Version 8.X
-set hlsearch
-set incsearch " highlights as you type out your search
-
-" Custom Key Bindings
+" Custom Key Bindings - https://vim.fandom.com/wiki/Mapping_keys_in_Vim_-_Tutorial_(Part_1)
 map <F2> :Vexplore<Enter>        " opens a new explore window vertically
 map <F3> :Hexplore<Enter>        " opens a new explore window horizonally
 map <F4> :Rexplore<Enter>        " reopens an explore window, use ':Explore' if no previous
@@ -92,8 +49,18 @@ map <F5> :bp<Enter>              " previous open buffer
 map <F6> :bn<Enter>              " next open buffer
 map <F7> :b# \| bd # <Enter>     " move to previous buffer, close current one
 
-"  Mouse Options
-set mouse+=a      " click and drag selets text in visual mode
+" Tap ESC to clear search highlighting in NORMAL mode
+set timeoutlen=0 " Prevent ESC key sticking around after being pressd
+nnoremap <TAB> :noh<Enter>
+" nnoremap <ESC> :noh <Enter> - Seems to break things atm
+
+" Mintty sends '' to the terminal when ctrl + backspace are pressed.
+" The terminal seems to understand what this means in most situations except
+" in vim. 
+" This maps the ctrl + backspace to delete the previous word in both 
+" NORMAL and INSERT mode. 
+map  db
+imap  <C-W>
 
 " Writes the file automatically (i.e. when using ctags to move between files)
 set autowrite
@@ -111,17 +78,104 @@ endif
 set ignorecase
 set smartcase
 
+" highlights as you type out your search
+set hlsearch
+set incsearch 
+
+" ------- Things stolen from Sam
+" Autocomplete bar in commandline etc
+set wildmenu 
+
+
+" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+"
+"                        Toggle Settings on HOSTNAME
+"
+" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+let hostname = substitute(system('hostname'), '\n', '', '')
+if hostname == "daspro1"
+ 
+ "                      Plugins Specific Stuff (Vundle)
+ "
+ " -----------------------------------------------------------------------------
+ filetype off      " Required by Vundle
+ set rtp+=~/.vim/bundle/Vundle.vim
+ call vundle#begin()
+ 
+ Plugin 'VundleVim/Vundle.vim'
+ 
+ " PLUGINS START
+ Plugin 'ajh17/VimCompletesMe'         " Tab autocomplete
+ Plugin 'jlfwong/vim-mercenary'        " HGblame to see who and when a change was made
+ Plugin 'justinmk/vim-syntax-extra'    " Super Syntax Highlighting
+ Plugin 'morhetz/gruvbox'              " Colours
+ Plugin 'vim-scripts/fitnesse.vim'     " Fitnesse syntax highlighting
+ Plugin 'ctags.vim--Johnson'           " Display function name in the status bar
+ " PLUGINS END
+ 
+ call vundle#end()            " required
+ filetype plugin indent on    " required
+ 
+ 
+ "                     	Settings due to using Plugins
+ "
+ " -----------------------------------------------------------------------------
+ 
+ " ajh17/VimCompletesMe
+ let g:completekey = "<Insert>" " Move gcompletekey to get tab complete working
+ set completeopt=longest,menuone " Autocomplete - not a plugin setting?
+                                 " longest - Only inserts longest common text
+                                 "           of the matches
+                                 " menuone - Displays popup menu, even when
+                                 "           there is only a single match
+
+ " justinmk/vim-syntax-extra
+ syntax enable
+ 
+ " mohertz/gruvbox
+ colorscheme gruvbox
+ let g:gruvbox_contrast_dark = 'hard'
+ set background=dark
+ 
+ " vim-scripts/fitnesse.vim
+ au BufNewFile,BufRead *.wiki set ft=fitnesse
+
+ " ctags.vim--Johnson
+ let g:ctags_statusline=1   " To show tag name in status line.
+ let generate_tags=1
+
+ "                          	Non-Plugin Settings
+ "
+ " -----------------------------------------------------------------------------
+ highlight cursorline cterm=bold guibg=#282828
+ highlight LineNr guibg=#282828
+ 
+ 
+ set termguicolors " requires vim Version 8.X
+
+else
+
+ set t_Co=256
+ colorscheme desert
+ syntax enable
+
+ highlight Search cterm=bold ctermfg=256 ctermbg=214
+
+ highlight LineNr ctermbg=236
+ highlight CursorLine cterm=bold ctermbg=236
+ highlight CursorLineNr cterm=bold ctermbg=236
+
+endif
+
+ " Needs to be below colourscheme
+ set cursorline
+
 
 " ----------------------------------------------------------------------------
 "
-"                          	Settings for when not using plugins
+"                          	Kept from DAI .vimrc
 "
 " -----------------------------------------------------------------------------
-
-" set t_Co=256
-" colorscheme desert
-" syntax enable
-
 
 set showmatch     " When a bracket is inserted, briefly shows matching bracket
 set cindent       " Automatic C program indenting (set by 'shiftwidth')
@@ -135,23 +189,14 @@ set complete=.,w,b,u,t  " Complete options
                    " u	scan the unloaded buffers
                    " t	tag completion
 
-
 " Not really sure what they do yet...
 set noautoindent
 set backspace=2  " Backspace, current setting of 2 is archaic, change
-
-
 
 if has("folding")
   set foldmethod=indent
   set foldlevel=99
 endif " has("folding")
-
-" ----------------------------------------------------------------------------
-"
-"                          	Kept from DAI .vimrc
-"
-" -----------------------------------------------------------------------------
 
 map <F8> :!ut_ctags<CR>
 map! <F8> <ESC>:!ut_ctags<CR>
