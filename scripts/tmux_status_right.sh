@@ -1,30 +1,46 @@
 #!/usr/bin/env bash
 
-# OutputString can be a maximum of 40 characters
+# OutputString max characters can be modified in .tmux.conf
 
 OutputString=""
 
-# Who
-Who="$(who | wc -l)"
-OutputString="$Who"
-
 # Time
 Time="$(date +%H:%M)"
-OutputString="$Time - $OutputString"
+OutputString="$Time"
 
 # Check the state of the system
 #   - running
 #   - BUILD
 #   - SHUTDOWN
-System="system"
 if ps ux | grep -q "[s]m_background"
 then
-  OutputString="$System running - $OutputString"
+  OutputString="running - $OutputString"
 elif ps ux | grep -q "[u]t_sys_build"
 then
-  OutputString="$System BUILD - $OutputString"
+  OutputString="BUILDING - $OutputString"
 else
-  OutputString="$System SHUTDOWN - $OutputString"
+  OutputString="SHUTDOWN - $OutputString"
 fi
+
+# User logged in
+while read Line ;
+do
+  User="$(grep $Line ~/.files/scripts/user_snooping/user_list )"
+  if [ -z "$User" ]
+  then
+    LogFile="$(grep $Line ~/.files/scripts/user_snooping/unknown_users.log )"
+    if [ -z "$LogFile" ]
+    then
+      LogString="Unknown IP: $Line"
+      LogString="$LogString - $(date)"
+      echo $LogString >> cool_shit_from_sam/unknown_users.log
+    fi
+    
+  else
+    LineArray=($User)
+    Name="${LineArray[1]} ${LineArray[2]}"
+    OutputString="$Name - $OutputString"
+  fi
+done <<< "$(w -hs | awk '{print $3}')"
 
 echo ${OutputString}
