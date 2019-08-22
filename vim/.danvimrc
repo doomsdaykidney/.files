@@ -56,13 +56,13 @@ set timeoutlen=0 " Prevent ESC key sticking around after being pressd
 nnoremap <TAB> :noh<Enter>
 " nnoremap <ESC> :noh <Enter> - Seems to break things atm
 
-" Mintty sends '' to the terminal when ctrl + backspace are pressed.
-" The terminal seems to understand what this means in most situations except
-" in vim. 
+" Mintty can send '' or '' to the terminal when ctrl + backspace are pressed.
 " This maps the ctrl + backspace to delete the previous word in both 
 " NORMAL and INSERT mode. 
 map  db
 imap  <C-W>
+map  db
+imap  <C-W>
 
 " Writes the file automatically (i.e. when using ctags to move between files)
 set autowrite
@@ -85,6 +85,11 @@ set incsearch
 " ------- Things stolen from Sam
 " Autocomplete bar in commandline etc
 set wildmenu 
+" So what if I quit/save when I have caps lock on...
+command! Q q
+command! W w
+command! WQ wq
+command! Wq wq
 
 
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -218,12 +223,29 @@ if has("autocmd")
 
 endif " has("autocmd")
 
-
-" SAM
+" -----------------------------------------------------------------------------
 "
-" So what if I quit/save when I have caps lock on...
-command! Q q
-command! W w
-command! WQ wq
-command! Wq wq
+"                               Functions
+"
+" -----------------------------------------------------------------------------
 
+" Calling FormatJson() turns horrendous json files into somewhat readable files
+func! FormatJson()
+  silent %!python -m json.tool
+endfu
+
+" Python specific settings
+func! PythonSettings()
+  set textwidth=79  " lines longer than 79 columns will be broken
+  set shiftwidth=4  " operation >> indents 4 columns; << unindents 4 columns
+  set tabstop=4     " a hard TAB displays as 4 columns
+  set expandtab     " insert spaces when hitting TABs
+  set softtabstop=4 " insert/delete 4 spaces when hitting a TAB/BACKSPACE
+  set shiftround    " round indent to multiple of 'shiftwidth'
+  set autoindent    " align the new line indent with the previous line
+endfu
+
+if has("autocmd")
+  autocmd BufNewFile,BufRead *.json call FormatJson()
+  autocmd BufNewFile,BufRead *.py call PythonSettings()
+endif
