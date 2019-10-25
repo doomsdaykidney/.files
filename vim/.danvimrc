@@ -59,10 +59,10 @@ nnoremap <TAB> :noh<Enter>
 " Mintty can send '' or '' to the terminal when ctrl + backspace are pressed.
 " This maps the ctrl + backspace to delete the previous word in both 
 " NORMAL and INSERT mode. 
-map  db
-imap  <C-W>
-map  db
-imap  <C-W>
+"map  db
+"imap  <C-W>
+"map  db
+"imap  <C-W>
 
 " Writes the file automatically (i.e. when using ctags to move between files)
 set autowrite
@@ -87,6 +87,7 @@ set incsearch
 set wildmenu 
 " So what if I quit/save when I have caps lock on...
 command! Q q
+command! Qa qa
 command! W w
 command! WQ wq
 command! Wq wq
@@ -229,6 +230,11 @@ endif " has("autocmd")
 "
 " -----------------------------------------------------------------------------
 
+" Removes trailing whitespace from file
+func! RemoveTrailingWhitespace()
+  s/ *$//
+endfu
+
 " Calling FormatJson() turns horrendous json files into somewhat readable files
 func! FormatJson()
   silent %!python -m json.tool
@@ -249,3 +255,5 @@ if has("autocmd")
   autocmd BufNewFile,BufRead *.json call FormatJson()
   autocmd BufNewFile,BufRead *.py call PythonSettings()
 endif
+
+map <F9> :call RemoveTrailingWhitespace()<CR>

@@ -43,4 +43,4 @@ do
   fi
 done <<< "$(w -hs | awk '{print $3}')"
 
-echo ${OutputString}
+echo -e ${OutputString}
